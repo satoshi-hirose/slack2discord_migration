@@ -38,21 +38,26 @@ def fill_references(message, users, channels):
     for cid, name in channels.items():
         message = message.replace(f"<#{cid}>", f"#{name}")
     for uid, name in users.items():
+        # just a preference to see <@uid> become @name
+        message = message.replace(f"<@{uid}>", f"@{name}")
+        # also noticed that replacing uid alone in "<@uid>" was turning into "<@name" without the '>', which looked odd
         message = message.replace(f"{uid}", f"{name}")
     return message
 
 def register_commands():
     @bot.command(pass_context=True)
-    async def import_all_channels(ctx, *parentpath):
+    async def import_all_channels(ctx, *args):
         """
         Import .json files in each Slack channel dicrectory in the specified path,
         Export each channel's text and attachted files to a Discord channel wih identical name.
         The directory path, which include user.json and channels.json should be specified.
+        Optionally give a category channel ID in which to create the text channels.
         :param ctx:
         :param path:
+        :param category id (optional):
         :return:
         """
-        parentpath=parentpath[0]
+        parentpath=args[0]
         """
         users = get_display_names(json_file_paths)
         Generates a dictionary of user_id => display_name pairs
@@ -82,14 +87,23 @@ def register_commands():
             for channel in channels_json:
                 channels[channel['id']] = channel['name']
                 print(f"\tChannel ID: {channel['id']} -> Channel Name: {channels[channel['id']]}")
+                
+        category_id = int(args[1]) if len(args) > 0 else None
+        if category_id:
+            category = ctx.guild.get_channel(category_id)
+            category_name = category.name
 
         """
         Loop for channles
         """
         for cid, name in channels.items():
             path=f"{parentpath}{os.sep}{name}"
-            print(f"Import '{path}' to channel '#{name}'")
-            discord_channel = await ctx.guild.create_text_channel(name)
+            if category_id:
+                print(f"Import '{path}' to channel '#{name}' in category '{category_name}' ({category_id})")
+                discord_channel = await category.create_text_channel(name)
+            else:
+                print(f"Import '{path}' to channel '#{name}'")
+                discord_channel = await ctx.guild.create_text_channel(name)
             """
             Loop for json files
             """
@@ -113,8 +127,12 @@ def register_commands():
                                 username = message['user_profile']['display_name']
                             else:
                                 username = message['user_profile']['real_name']
+                        elif all(key in message for key in ['user']):
+                            # ran into an exception when message had no key 'user'
+                            username = fill_references(message['user'], users, channels)
                         else:
-                            username =fill_references(message['user'], users, channels)
+                            # could be "@Unknown User" or similar
+                            username = "@None"
 
                         # get message text
                         if all(key in message for key in ['text']):
@@ -162,4 +180,3 @@ if __name__ == "__main__":
     bot = commands.Bot(command_prefix="$")
     register_commands()
     bot.run(input("After Entering bot token, bot will be Ready!\nEnter Message in Discord channel as '$import_all_channels (directory name exported from slack)\n\n    Enter bot token: "))
-
