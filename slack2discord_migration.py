@@ -88,7 +88,7 @@ def register_commands():
                 channels[channel['id']] = channel['name']
                 print(f"\tChannel ID: {channel['id']} -> Channel Name: {channels[channel['id']]}")
                 
-        category_id = int(args[1]) if len(args) > 0 else None
+        category_id = int(args[1]) if len(args) > 1 else None
         if category_id:
             category = ctx.guild.get_channel(category_id)
             category_name = category.name
