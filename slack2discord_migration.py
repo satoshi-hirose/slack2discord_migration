@@ -147,7 +147,7 @@ def register_commands():
                         
                         # send message text (modified on 20220805)
                         post_text =f".\n\U0001F642__**{username}** *({timestamp})*__\n{text}"
-                         for i in range(round((len(post_text)+999)/2000)):
+                        for i in range(round((len(post_text)+999)/2000)):
                             await discord_channel.send(post_text[(i*2000):((i+1)*2000-1)])
                         # forward attatched files
                         if all(key in message for key in ['files']):
