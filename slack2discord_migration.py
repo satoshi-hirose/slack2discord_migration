@@ -6,12 +6,23 @@ import os
 import time
 import requests
 import discord
+#ADDED on 8/22
 import re
+import mimetypes
+import html
+
+UPLOAD_TO_GOOGLE = True
+if UPLOAD_TO_GOOGLE:
+    GOOGLE_DRIVE_DIR_ID = input("Enger Google Drive's Direcotry ID: ")
+    from pydrive.drive import GoogleDrive
+    from pydrive.auth import GoogleAuth
+    gauth = GoogleAuth()
+    gauth.LocalWebserverAuth()
+    gdrive = GoogleDrive(gauth)
 from datetime import datetime
 from discord.ext import commands
 
 THROTTLE_TIME_SECONDS = 1
-
 
 def get_file_paths(file_path):
     """
@@ -37,7 +48,9 @@ def fill_references(message, users, channels):
     :return: Filled message string
     """
     for cid, name in channels.items():
-        message = message.replace(f"<#{cid}>", f"#{name}")
+        # modified on 8/22
+        message = re.sub("<#" +cid +"(\|)?.{0,20}>", f"#{name}",message)
+        # end modified
     for uid, name in users.items():
         # just a preference to see <@uid> become @name
         message = message.replace(f"<@{uid}>", f"@{name}")
@@ -112,7 +125,7 @@ def register_commands():
             for json_file in sorted(json_file_paths):
                 with open(json_file, encoding="utf-8") as f:
                     """
-                    Loop for message
+                    Loop for message files
                     """
                     for message in json.load(f):
                         # get post time stamp
@@ -139,43 +152,86 @@ def register_commands():
                         if all(key in message for key in ['text']):
                             text = fill_references(message['text'], users, channels)
                             # in Discored, the preview is surpressed when http link enclosed in <>
-                            # to avoid this issue, I put the below 2 lines.
-                            text = re.sub("(<|\|)((http(s)?:\\\*\/\\\*\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}([-a-zA-Z0-9\\\@:%_\+.~#?&\/=]*))","\n\\2",text)
-                            text=re.sub("((http(s)?:\\\*\/\\\*\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}([-a-zA-Z0-9\\\@:%_\+.~#?&\/=]*))>","\\1\n",text)
+                            # to avoid this issue, I put the below lines.
+                            #  MODIFIED on 8/22 by SH
+                            text = re.sub("(<|\|)((http(s)?:\\\*\/\\\*\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}([-a-zA-Z0-9\\\@:%_\+.~#?&\/=]*))"," \\2",text)
+                            text=re.sub("((http(s)?:\\\*\/\\\*\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}([-a-zA-Z0-9\\\@:%_\+.~#?&\/=]*))>","\\1 ",text)
+                            #  END MODIFIED on 8/22 by SH
+                            # added on 8/22 by SH
+                            text = html.unescape(text)
+                            # end added on 8/22 by SH
                         else:
                             text ="\n"
                         
-                        # send message text (modified on 20220805)
+                        # send message text (modified on 20220805) MODIFIED on 8/22
                         post_text =f".\n\U0001F642__**{username}** *({timestamp})*__\n{text}"
-                        for i in range(round((len(post_text)+999)/2000)):
-                            await discord_channel.send(post_text[(i*2000):((i+1)*2000-1)])
-                        # forward attatched files
-                        if all(key in message for key in ['files']):
-                            flist = message['files']
-                            for files in flist:
-                                try:
-                                    durl =files['url_private']
-                                    url=durl.partition('?')[0]
-                                    url=url.replace('\\','' )
-                                    filename=os.path.basename(url)
-                                    urlData = requests.get(durl).content
-                                    with open(filename ,'wb') as ff: # wb でバイト型を書き込める
-                                        ff.write(urlData)
-                                        ff.close()
+                        ############################################################
+                        # Upload files to Google Drive and post link to the file. ##
+                        ############################################################
+                        if UPLOAD_TO_GOOGLE:
+                            # forward attatched files
+                            if all(key in message for key in ['files']):
+                                flist = message['files']
+                                for files in flist:
                                     try:
-                                        await discord_channel.send(file=discord.File(filename))
-                                        os.remove(filename)
+                                        durl =files['url_private']
+                                        url=durl.partition('?')[0]
+                                        url=url.replace('\\','')
+                                        filename=os.path.basename(url)
+                                        urlData = requests.get(durl).content
+                                        with open(filename ,'wb') as ff: # wb でバイト型を書き込める
+                                            ff.write(urlData)
+                                            ff.close()
+                                        try:
+                                            # upload to Google Drive
+                                            f = gdrive.CreateFile({'title': filename, 'mimeType': mimetypes.guess_type(filename)[0]})
+                                            f['parents']= [{'id': GOOGLE_DRIVE_DIR_ID}]
+                                            f.SetContentFile(filename)
+                                            f.Upload()
+                                            post_text = post_text+"\nhttps://drive.google.com/file/d/"+f['id']
+                                        except Exception as e:
+                                            print(f"\t{filename} upload failed")
+                                            os.makedirs("unuploaded_files", exist_ok=True)
+                                            os.rename(f"{filename}", f"unuploaded_files{os.sep}{filename}")
+                                            post_text = post_text+"\n __*File Upload Failed: " + filename +"*__"
                                     except Exception as e:
-                                        print(f"\t{filename} upload failed")
-                                        os.makedirs("unuploaded_files", exist_ok=True)
-                                        os.rename(f"{filename}", f"unuploaded_files{os.sep}{filename}")
-                                        await discord_channel.send(f"{filename} upload failed.")
-                                except Exception as e:
-                                    print(f"\t{timestamp} file download failed")
+                                        post_text = post_text+"\n __*File Download Failed: " + filename +"*__"
+                                        print(f"\t{timestamp} file download failed")
+                            for i in range(round((len(text)+999)/2000)):
+                                await discord_channel.send(post_text[(i*2000):((i+1)*2000-1)])
+
+                        ##############################################
+                        # Directly upload attached file to Discord. ##
+                        ##############################################
+                        else:
+                            for i in range(round((len(text)+999)/2000)):
+                                await discord_channel.send(post_text[(i*2000):((i+1)*2000-1)])                        # forward attatched files
+                            if all(key in message for key in ['files']):
+                                flist = message['files']
+                                for files in flist:
+                                    try:
+                                        durl =files['url_private']
+                                        url=durl.partition('?')[0]
+                                        url=url.replace('\\','')
+                                        filename=os.path.basename(url)
+                                        urlData = requests.get(durl).content
+                                        with open(filename ,'wb') as ff: # wb でバイト型を書き込める
+                                            ff.write(urlData)
+                                            ff.close()
+                                        try:
+                                            await discord_channel.send(file=discord.File(filename))
+                                            os.remove(filename)
+                                        except Exception as e:
+                                            print(f"\t{filename} upload failed")
+                                            os.makedirs("unuploaded_files", exist_ok=True)
+                                            os.rename(f"{filename}", f"unuploaded_files{os.sep}{filename}")
+                                            await discord_channel.send(f"{filename} upload failed.")
+                                    except Exception as e:
+                                        print(f"\t{timestamp} file download failed")
                         time.sleep(THROTTLE_TIME_SECONDS)
         print(f"Import complete")
 
 if __name__ == "__main__":
     bot = commands.Bot(command_prefix="$")
     register_commands()
-    bot.run(input("After Entering bot token, bot will be Ready!\nEnter Message in Discord channel as '$import_all_channels (directory name exported from slack)'\n or '$import_all_channels (directory name exported from slack) (CATEGORY_ID)'\n\n    Enter bot token: "))
+    bot.run(input("After Entering bot token, bot will be Ready!\nEnter Message in Discord channel as '$import_all_channels (directory name exported from slack)\n\n    Enter bot token: "))
