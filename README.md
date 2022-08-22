@@ -1,7 +1,12 @@
 # slack2discord_migration
 python code for migration from slack to discord.
 
+Instration for UPLOAD_TO_GOOGLE version may be come soon.
+
 # How to use
+Rewrite Line 14 
+	UPLOAD_TO_GOOGLE = False
+
 
 - preparation
 
