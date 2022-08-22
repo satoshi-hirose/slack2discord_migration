@@ -178,4 +178,4 @@ def register_commands():
 if __name__ == "__main__":
     bot = commands.Bot(command_prefix="$")
     register_commands()
-    bot.run(input("After Entering bot token, bot will be Ready!\nEnter Message in Discord channel as '$import_all_channels (directory name exported from slack)\n\n    Enter bot token: "))
+    bot.run(input("After Entering bot token, bot will be Ready!\nEnter Message in Discord channel as '$import_all_channels (directory name exported from slack)'\n or '$import_all_channels (directory name exported from slack) (CATEGORY_ID)'\n\n    Enter bot token: "))
