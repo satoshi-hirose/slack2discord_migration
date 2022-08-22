@@ -6,6 +6,7 @@ import os
 import time
 import requests
 import discord
+import re
 from datetime import datetime
 from discord.ext import commands
 
@@ -111,7 +112,7 @@ def register_commands():
             for json_file in sorted(json_file_paths):
                 with open(json_file, encoding="utf-8") as f:
                     """
-                    Loop for message files
+                    Loop for message
                     """
                     for message in json.load(f):
                         # get post time stamp
@@ -138,16 +139,14 @@ def register_commands():
                         if all(key in message for key in ['text']):
                             text = fill_references(message['text'], users, channels)
                             # in Discored, the preview is surpressed when http link enclosed in <>
-                            # to avoid this issue, I put the below 3 lines.
-                            # this should also affect the other text.
-                            text =text.replace('<http',' http' )
-                            text =text.replace('>',' ' )
-                            text =text.replace('|http',' http' )
+                            # to avoid this issue, I put the below 2 lines.
+                            text = re.sub("(<|\|)((http(s)?:\\\*\/\\\*\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}([-a-zA-Z0-9\\\@:%_\+.~#?&\/=]*))","\n\\2",text)
+                            text=re.sub("((http(s)?:\\\*\/\\\*\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}([-a-zA-Z0-9\\\@:%_\+.~#?&\/=]*))>","\\1\n",text)
                         else:
                             text ="\n"
                         
                         # send message text (modified on 20220805)
-                        post_text =f"**{username}** *({timestamp})*\n{text}\n."
+                        post_text =f"__**{username}** *({timestamp})*__\n{text}\n=====================================================/n"
                         for i in range(round((len(text)+999)/2000)):
                             await discord_channel.send(post_text[(i*2000):((i+1)*2000-1)])
                         # forward attatched files
