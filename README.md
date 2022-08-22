@@ -13,10 +13,11 @@ python code for migration from slack to discord.
 		    2, New Application 
      			    note: too simple name will cause an error something like "too many people use this name"
 		            e.g. do not use 'test', 'test_hirose' is OK.
-		    3. bot -> add bot -> yes, do it! -> Public Bot off -> Reste Token -> Copy -> keep the token somewhere hereafter, BOTTOKEN）
+		    3. bot -> add bot -> yes, do it! -> Public Bot off -> Reset Token -> Copy -> keep the token somewhere hereafter, BOTTOKEN）
 		    4, oAuth2->URL GEnerator -> bot -> Administrator -> Copy the link. -> keep the link somewhere　（hereafter, BOTLINK）
 
-    - pip
+
+    - pip (Terminal)
    
 		    1, go to slack2discord_migration directory
 		    2, install requirements (terminal: go to "pip install -r requirements.txt" in terminal)
@@ -35,7 +36,7 @@ python code for migration from slack to discord.
      
 	    create and download the data (admin right required)
       
-		    1, right click the workspace name -> settings & administration -> workspace setting 
+		    1, Left click the workspace name -> settings & administration -> workspace setting 
               ->import/export data -> export -> Export date range "entire history" -> start export
 		    2, wait for a while (slackbot will announce when finished)
 		    3, refresh the site (F5)
@@ -53,3 +54,6 @@ python code for migration from slack to discord.
 		    1, in text channel in Discord, type "$import_all_channels ./"
 		    2, wait a while (about [number of comment] x 1 sec)
 
+                    (Optional) if you want to create the Discord channels under the category "text channel" or else, 
+                    1, right click "text channel" -> copy ID (CATEGORY_ID)
+		    2, in text channel in Discord, type "$import_all_channels ./ CATEGORY_ID"
