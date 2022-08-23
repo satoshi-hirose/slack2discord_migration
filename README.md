@@ -26,15 +26,15 @@ Rewrite Line 14 of Code.gs as `UPLOAD_TO_GOOGLE = False`
 		    2, New Application 
      			    note: too simple name will cause an error something like "too many people use this name"
 		            e.g. do not use 'test', 'test_hirose' is OK.
+			    note: Cannot include "discord"
 		    3. bot -> add bot -> yes, do it! -> Public Bot off -> Reset Token -> Copy -> keep the token somewhere hereafter, BOTTOKEN）
 		    4, oAuth2->URL GEnerator -> bot -> Administrator -> Copy the link. -> keep the link somewhere　（hereafter, BOTLINK）
 
 
     - pip (Terminal)
-   
-		    1, go to slack2discord_migration directory
-		    2, install requirements ("pip install -r requirements.txt" in terminal)
-
+   		
+		    1, Download ZIP of this repository and unzip (CODE_DIRECTORY)
+		    2, in terminal, install requirements `cd CODE_DIRECTORY; pip3 install -r requirements.txt" in terminal`
 
 - preparation for each server
 
