@@ -75,10 +75,12 @@ Rewrite Line 14 of Code.gs as `UPLOAD_TO_GOOGLE = False`
 Rewrite Line 14 of Code.gs as `UPLOAD_TO_GOOGLE = True`
 
 - preparation
-the same as above
+
+     the same as above
 
 - preparation for each server
-in addition to above, 
+
+     in addition to above, 
     - Google Cloud Console
       
 		    1. go https://console.cloud.google.com/home/dashboard -> My First Project (or a project name you have created)-> New Project -> create (! remember your project name: PROJECT_NAME)
