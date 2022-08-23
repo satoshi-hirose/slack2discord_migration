@@ -113,3 +113,29 @@ Rewrite Line 14 of Code.gs as `UPLOAD_TO_GOOGLE = True`
 		    2, in a text channel (e.g. general) in Discord, type "$import_all_channels ./ CATEGORY_ID"
 		    3, wait a while (about [number of comment] x 1 sec)
 		    optionally, you can run without CATEGORY_ID ("$import_all_channels ./")
+
+# Clipborad
+ copy and paste below to text file before you start
+ 
+ BOTTOKEN
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+BOTLINK
+https://discord.com/api/oauth2/authorize?client_id=0000000000000000000000000&permissions=8&scope=bot
+
+CODE_DIRECTORY
+/Users/XXX/Downloads/slack2discord_migration-main
+
+JSON_DIRECTORY 
+* note: Original directory name with spaces can cause an unpleasant event. please rename 
+/Users/XX/Downloads/XXXXXXXXXXXXXX
+
+
+below are requried if you chose 2. Upload files to Google Drive and post URL link to discord.
+
+CLIENT_SECRETS_FILE
+* note:  not "secret", but "secrets" 
+rename as "client_secrets.json"
+
+GOOGLE_DRIVE_FILE_DIRECTORY_ID
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
