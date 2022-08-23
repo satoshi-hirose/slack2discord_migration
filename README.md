@@ -15,6 +15,7 @@ there are two options for the file forwarding procedure.
 # How to use
 ## 1. Directly upload the files to Discord.
 Rewrite Line 14 of Code.gs as `UPLOAD_TO_GOOGLE = False`
+prepare clipboard
 
 - preparation (perform once, even if you want to migrate multiple Workspaces)
 
@@ -73,6 +74,7 @@ Rewrite Line 14 of Code.gs as `UPLOAD_TO_GOOGLE = False`
 
 ## 2. Upload files to Google Drive and post URL link to discord.
 Rewrite Line 14 of Code.gs as `UPLOAD_TO_GOOGLE = True`
+prepare clipboard
 
 - preparation
 
