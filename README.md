@@ -133,7 +133,7 @@ JSON_DIRECTORY
 /Users/XX/Downloads/XXXXXXXXXXXXXX
 
 
-below are requried if you chose 2. Upload files to Google Drive and post URL link to discord.
+below are ony for 2. Upload files to Google Drive and post URL link to discord.
 
 CLIENT_SECRETS_FILE
 * note:  not "secret", but "secrets" 
