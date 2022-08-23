@@ -13,7 +13,7 @@ import html
 
 UPLOAD_TO_GOOGLE = True
 if UPLOAD_TO_GOOGLE:
-    GOOGLE_DRIVE_DIR_ID = input("Enger Google Drive's Direcotry ID: ")
+    GOOGLE_DRIVE_DIR_ID = input("Enter Google Drive's Direcotry ID: ")
     from pydrive.drive import GoogleDrive
     from pydrive.auth import GoogleAuth
     gauth = GoogleAuth()
