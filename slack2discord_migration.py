@@ -188,6 +188,7 @@ def register_commands():
                                             f['parents']= [{'id': GOOGLE_DRIVE_DIR_ID}]
                                             f.SetContentFile(filename)
                                             f.Upload()
+                                            os.remove(filename)
                                             post_text = post_text+"\nhttps://drive.google.com/file/d/"+f['id']
                                         except Exception as e:
                                             print(f"\t{filename} upload failed")
