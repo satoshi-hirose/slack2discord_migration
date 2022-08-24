@@ -1,4 +1,8 @@
-Uploading 画面収録 2022-08-24 10.55.10.mov…
+
+
+https://user-images.githubusercontent.com/11308085/186359817-c7404274-1709-413e-b9a2-a4ea24831eda.mov
+
+
 
 # slack2discord_migration
 Python code for migration from slack to discord.
