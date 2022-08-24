@@ -1,5 +1,5 @@
 # slack2discord_migration
-Python code for migration from slack to discord.All history of the comments and attached files in all open channels in a Slack Workspace are forwarded to a Discord server. there are two options for the file forwarding procedure.
+Python code for migration from slack to discord.
 
 All history of the comments and **attached files** in all open channels in a Slack Workspace are forwarded to a Discord server.
 there are two options for the file forwarding procedure.
