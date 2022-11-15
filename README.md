@@ -63,7 +63,7 @@ prepare clipboard (see below)
 		    2, wait for a while (slackbot will announce finish)
 		    3, refresh the site (F5)
 		    4, download the exports
-		    5, unzip the downloaded file and create directory include all JSON file (JSON_DIRECTORY)
+		    5, unzip the downloaded file and find directory include all JSON file (JSON_DIRECTORY)
 
 - run the script
 
