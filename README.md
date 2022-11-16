@@ -36,7 +36,7 @@ prepare clipboard (see below)
      			    note: too simple name will cause an error something like "too many people use this name"
 		            e.g. do not use 'test', 'test_hirose' is OK.
 			    note: Cannot include "discord"
-		    3. bot -> add bot -> yes, do it! -> Public Bot off -> Reset Token -> Copy -> keep the token somewhere hereafter, BOTTOKEN）
+		    3. bot -> add bot -> yes, do it! -> Public Bot off, Message Content Intent on  -> Reset Token -> Copy -> keep the token somewhere hereafter, BOTTOKEN）
 		    4, oAuth2->URL GEnerator -> bot -> Administrator -> Copy the link. -> keep the link somewhere　（hereafter, BOTLINK）
 
 
