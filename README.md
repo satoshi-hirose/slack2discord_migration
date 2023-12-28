@@ -6,7 +6,7 @@ https://user-images.githubusercontent.com/11308085/186359817-c7404274-1709-413e-
 
 # slack2discord_migration
 Python code for migration from slack to discord.
-
+The current version is tested with Python 3.11
 See also https://github.com/satoshi-hirose/slack-to-discord-bridge-via-google
 
 All history of the comments and **attached files** in all open channels in a Slack Workspace are forwarded to a Discord server.
@@ -36,14 +36,14 @@ prepare clipboard (see below)
      			    note: too simple name will cause an error something like "too many people use this name"
 		            e.g. do not use 'test', 'test_hirose' is OK.
 			    note: Cannot include "discord"
-		    3. bot -> add bot -> yes, do it! -> Public Bot off, Message Content Intent on  -> Reset Token -> Copy -> keep the token somewhere hereafter, BOTTOKEN）
+		    3. bot -> add bot -> yes, do it! -> Public Bot off, Presence Intent on, Server Members Intent on, Message Content Intent on  -> Reset Token -> Copy -> keep the token somewhere hereafter, BOTTOKEN）
 		    4, oAuth2->URL GEnerator -> bot -> Administrator -> Copy the link. -> keep the link somewhere　（hereafter, BOTLINK）
 
 
     - pip (Terminal)
    		
 		    1, Download ZIP of this repository and unzip (CODE_DIRECTORY)
-		    2, in terminal, install requirements `cd CODE_DIRECTORY; pip3 install -r requirements.txt" in terminal`
+		    2, in terminal, install requirements `cd CODE_DIRECTORY; pip3.11 install -r requirements.txt" in terminal`
 
 - preparation for each server
 
