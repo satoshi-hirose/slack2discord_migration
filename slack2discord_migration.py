@@ -233,6 +233,7 @@ def register_commands():
         print(f"Import complete")
 
 if __name__ == "__main__":
-    bot = commands.Bot(command_prefix="$")
+    # Modified onn 2023/12/28 ,intents=discord.Intents.all()
+    bot = commands.Bot(command_prefix="$",intents=discord.Intents.all())
     register_commands()
     bot.run(input("After Entering bot token, bot will be Ready!\nEnter Message in Discord channel as '$import_all_channels (directory name exported from slack)\n\n    Enter bot token: "))
